@@ -25,6 +25,10 @@ def searchId(user):
 application = Flask(__name__)
 #print(__name__)
 
+@application.route('/', methods = ['GET'])
+def isAlive():
+    return jsonify(success=True), 200
+
 @application.route('/users/signup', methods = ['POST'])
 def create():
     content = request.get_json()
