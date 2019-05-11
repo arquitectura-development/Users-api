@@ -1,5 +1,4 @@
-from flask import Flask, jsonify
-from flask import request
+from flask import Flask, jsonify, request
 
 def search(user):
     line_counter = -1
@@ -77,7 +76,6 @@ def name():
 @application.route('/users/auth')
 def auth():
     userid = request.args.get('userId')
-    #print(userid)
     word= searchId(userid)
     if word:
         return jsonify(success=True), 200
