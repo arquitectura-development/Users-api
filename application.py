@@ -62,12 +62,14 @@ def login():
         return jsonify(success=False), 404
 
 
-@application.route('/admin/users/name')
+@application.route('/admin/users/name', methods =['GET'])
 def name():
-    userid = request.args.get('userId')
+    userId = request.args.get('userId')
+    print(userId)
     if userId != '0':
         return jsonify(success=False), 401
     searchUserid = request.args.get('searchUserId')
+    print
     word = searchId(searchUserid)
     if word:
         return jsonify(success=True, email=word[1], name=word[2]), 200
@@ -75,7 +77,7 @@ def name():
         return jsonify(success=False), 404
 
 
-@application.route('/users/auth')
+@application.route('/users/auth', methods =['GET'])
 def auth():
     userid = request.args.get('userId')
     word= searchId(userid)
