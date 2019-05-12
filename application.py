@@ -1,12 +1,12 @@
 from flask import Flask, jsonify, request
 
 def search(user):
-    line_counter = -1
+    line_counter = 0
     file_users = open("users.txt", "r")
     for line in file_users:
-        line_counter = line_counter+1
         word = line.split('%')
         word[2]= word[2][:len(word[2])-1]
+        line_counter = int(word[0])
         if user in word[1] and len(word[1]) == len(user):
             return word, line_counter
     return list(), line_counter
@@ -20,6 +20,26 @@ def searchId(user):
         if user == word[0]:
             return word
     return list()
+
+
+def deletebyId(user):
+    found=0
+    buffer = ""
+    file_users = open("users.txt", "r")
+    for line in file_users:
+        print(line)
+        word=line.split('%')
+        print(word[0])
+        if word[0] != user:
+            buffer = buffer + line
+        else:
+            found=1
+    file_users.close()
+    file_changer = open("users.txt", "w")
+    file_changer.write(buffer)
+    return found
+
+
 
 application = Flask(__name__)
 #print(__name__)
@@ -85,6 +105,20 @@ def auth():
         return jsonify(success=True), 200
     else:
         return jsonify(success=False), 404
+
+@application.route('/users/delete', methods=['DELETE'])
+def delete():
+    userid=request.args.get('userId')
+    if userid==str(0):
+        return jsonify(success=False), 403
+
+    found = deletebyId(userid)
+
+    if found == 0:
+        return jsonify(success=False), 404
+
+    else:
+        return jsonify(success=True), 200
 
 
 if __name__ == '__main__':
