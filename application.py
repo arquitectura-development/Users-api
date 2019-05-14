@@ -85,11 +85,10 @@ def login():
 @application.route('/admin/users/name', methods =['GET'])
 def name():
     userId = request.args.get('userId')
-    print(userId)
     if userId != '0':
         return jsonify(success=False), 401
     searchUserid = request.args.get('searchUserId')
-    print
+
     word = searchId(searchUserid)
     if word:
         return jsonify(success=True, email=word[1], name=word[2]), 200
