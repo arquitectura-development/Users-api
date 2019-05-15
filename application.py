@@ -102,7 +102,7 @@ def login():
 
 @application.route('/admin/users/name', methods =['GET'])
 def name():
-    user_id = request.args.get('userId')
+    userId = request.args.get('userId')
     searchUserid = request.args.get('searchUserId')
     if userId != '0':
         return jsonify(success=False), 401
