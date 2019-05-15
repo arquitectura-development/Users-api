@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 
-def isValid(token):
+def is_valid(token):
     if not token:
         return False
     elif len(token)==0:
@@ -23,7 +23,7 @@ def search(user):
     file_users.close()
     return list(), line_counter
 
-def searchId(user):
+def search_id(user):
     file_users = open("users.txt", "r")
     for line in file_users:
         word = line.split('%')
@@ -35,7 +35,7 @@ def searchId(user):
     return list()
 
 
-def deletebyId(user):
+def delete_by_id(user):
     found=0
     buffer = ""
     file_users = open("users.txt", "r")
@@ -56,7 +56,7 @@ application = Flask(__name__)
 #print(__name__)
 
 @application.route('/', methods = ['GET'])
-def isAlive():
+def is_alive():
     return jsonify(success=True), 200
 
 
@@ -64,10 +64,10 @@ def isAlive():
 def create():
     content = request.get_json()
 
-    if not isValid(content) or not 'name' in content or not 'email' in content:
+    if not is_valid(content) or not 'name' in content or not 'email' in content:
         return jsonify(success=False), 400
 
-    elif not isValid(content['name']) or not isValid(content['email']):
+    elif not is_valid(content['name']) or not is_valid(content['email']):
         return jsonify(success=False), 400
 
     else:
@@ -102,22 +102,22 @@ def login():
 
 @application.route('/admin/users/name', methods =['GET'])
 def name():
-    userId = request.args.get('userId')
+    user_id = request.args.get('userId')
     searchUserid = request.args.get('searchUserId')
     if userId != '0':
         return jsonify(success=False), 401
-    if isValid(searchUserid):
-        word = searchId(searchUserid)
+    if is_valid(searchUserid):
+        word = search_id(searchUserid)
         if word:
             return jsonify(success=True, email=word[1], name=word[2]), 200
-        
+
     return jsonify(success=False), 404
 
 @application.route('/users/auth', methods =['GET'])
 def auth():
     userid = request.args.get('userId')
-    if isValid(userid):
-        word= searchId(userid)
+    if is_valid(userid):
+        word= search_id(userid)
         if word:
             return jsonify(success=True), 200
 
@@ -130,8 +130,8 @@ def delete():
     if userid==str(0):
         return jsonify(success=False), 403
 
-    if isValid(userid):
-        found = deletebyId(userid)
+    if is_valid(userid):
+        found = delete_by_id(userid)
         if found == 1:
             return jsonify(success=True), 200
 
